@@ -1,0 +1,1 @@
+GlobalAveragePooling1D 는 간단히 말해 모든 feature layer를 모두 더해서 평균을 내는 것입니다. 이것도 dropout과 더불어서 오버피팅을 막기위한 방법

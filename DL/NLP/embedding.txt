@@ -1,0 +1,4 @@
+Embedding(7, 2, input_length=5)
+# 7은 단어의 개수. 즉, 단어 집합(vocabulary)의 크기이다.
+# 2는 임베딩한 후의 벡터의 크기이다.
+# 5는 각 입력 시퀀스의 길이. 즉, input_length이다.
