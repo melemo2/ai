@@ -1,0 +1,17 @@
+[seq to seq]
+encoder -> Context vector -> decoder
+
+단어가 많아지면 context vector가 fixed size 이기 때문에 정보손실이 발생
+
+
+input을 각각의 cells을 사용해서 decoder에 입력, attetion 사용
+
+state와 context vector을 넣어서 fully connected layer에 삽입 -> softmax -> attention weight
+
+각 가중치에 attention weight를 곱해서 tanh통과
+
+teacher focing
+prediction이 틀렸을경우 다시 fully connected layer에 넣으면 뒷 결과가 이상해짐
+두번째 결과에는 정답값을 넣어줌
+
+
