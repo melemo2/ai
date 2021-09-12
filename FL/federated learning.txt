@@ -3,3 +3,31 @@
 
 개인정보를 받아서 서버에서 학습하는 과정과 달리
 개인정보 전송에 대한 보안성이 증가함.
+
+label을 가져올 수 있으면 지도학습
+없으면 비지도학습
+
+[서버로 보내는방법]
+FedSGD, FedAvg
+
+[FedSGD]
+gradients or param을 서버로 전송
+서버에서 평균취해서 clients로 전송
+많은 packet 전송이 필요
+
+hyper param
+C : 한번에 weigh 업데이트마다 사용할 clients 수
+
+gradient decent 후에 w를 보내는 방법도 존재
+
+[FedAvg]
+ephocs, batch 단위로 보내는 방법
+
+hyper param
+C 동일
+E : 에폭
+B : 배치
+
+E=1, B=all 로 하게되면 FedSGD와 동일
+
+
