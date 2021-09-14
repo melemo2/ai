@@ -70,9 +70,9 @@ model.compile(optimizer='adam',
 
 history = model.fit(train_ds,
                     validation_data=val_ds,
-                    epochs=15,
-                    callbacks=[tensorboard_callback])
-
+                    epochs=15
+                    )
+#callbacks=[tensorboard_callback]
 history_dict = history.history
 
 import matplotlib.pyplot as plt
