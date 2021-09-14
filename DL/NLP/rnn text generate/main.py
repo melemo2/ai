@@ -4,16 +4,17 @@ import numpy as np
 from tensorflow.keras.utils import to_categorical
 import re
 
-f = open('C:\\Users\\sonmi\\Desktop\\data\\naver news\\news.txt','r',encoding='utf8')
+f = open('C:\\Users\\sonmi\\Desktop\\data\\naver news\\news2.txt','r',encoding='utf8')
 sentences = f.read()
 f.close()
 
+sentences = re.sub('[^w가-힣.,\% ]','',sentences)
 
 t = Tokenizer()
-print(t.word_counts())
-
 t.fit_on_texts([sentences])
 vocab_size = len(t.word_index) + 1
+
+breakpoint = 1
 
 sequences = list()
 for line in re.split('[.\n]',sentences): # Wn을 기준으로 문장 토큰화
@@ -21,6 +22,11 @@ for line in re.split('[.\n]',sentences): # Wn을 기준으로 문장 토큰화
     for i in range(1, len(encoded)):
         sequence = encoded[:i+1]
         sequences.append(sequence)
+
+# sequences.shape : (65,)
+# [[7,8], ~ 64]
+
+breakpoint = 2
 
 print('학습에 사용할 샘플의 개수: %d' % len(sequences))
 max_len=max(len(l) for l in sequences) # 모든 샘플에서 길이가 가장 긴 샘플의 길이 출력
@@ -30,22 +36,26 @@ sequences = pad_sequences(sequences, maxlen=max_len, padding='pre')
 print(sequences)
 
 sequences = np.array(sequences)
-X = sequences[:,:-1]
-y = sequences[:,-1]
+X = sequences[:,:-1] # 마지막 단어 샘플링
+y = sequences[:,-1] # 마지막 단어 전까지 모든 단어
 print(X)
 print(y)
 
-y = to_categorical(y, num_classes=vocab_size)
+breakpoint = 3
+
+y = to_categorical(y, num_classes=vocab_size) # one hot
 print(y)
+
+breakpoint = 4
 
 from tensorflow.keras.models import Sequential
 from tensorflow.keras.layers import Embedding, Dense, SimpleRNN
 model = Sequential()
-model.add(Embedding(vocab_size, 10, input_length=max_len-1)) # 레이블을 분리하였으므로 이제 X의 길이는 5
-model.add(SimpleRNN(32))
-model.add(Dense(vocab_size, activation='softmax'))
+model.add(Embedding(vocab_size, 20, input_length=max_len-1)) # 레이블을 분리하였으므로 이제 X의 길이는 5
+model.add(SimpleRNN(32)) # normal rnn / layer 32개 
+model.add(Dense(vocab_size, activation='softmax')) # 마지막 레이어는 다중 값 -> 확률
 model.compile(loss='categorical_crossentropy', optimizer='adam', metrics=['accuracy'])
-model.fit(X, y, epochs=200, verbose=2)
+model.fit(X, y, epochs=300, verbose=2)
 
 def sentence_generation(model, t, current_word, n): # 모델, 토크나이저, 현재 단어, 반복할 횟수
     init_word = current_word # 처음 들어온 단어도 마지막에 같이 출력하기위해 저장
@@ -64,4 +74,4 @@ def sentence_generation(model, t, current_word, n): # 모델, 토크나이저, �
     sentence = init_word + sentence
     return sentence
 
-print(sentence_generation(model, t, '경마장에', 4))
+print(sentence_generation(model, t, '홍남기', 10))
